@@ -1,43 +1,64 @@
+#include <stdlib.h>
+
 #include <core.h>
 
-/**
- * @brief This function calculates the discount for an item in a shopping cart.
- *
- * The discount is applied based on the number of items purchased. If more than 5 items
- * are bought, a 15% discount is applied. If between 4 and 5 items are bought, a 10% discount
- * is applied. The discount is calculated per item.
- *
- * @param item A pointer to a CartItem structure that contains item details and quantity.
- * @return The total discount applied to the items.
- */
-int calc_discount(CartItem *item)
-{
-    int discount = 0;
+char *err_msg(status_codes_t code) {
+    switch (code) {
+    case -1:
+        return "[Memory Error]: Dynamic allocation of memory failed!";
+        break;
 
-    if (item->amount > 5)
-    {
-        discount = (0.15 * item->item.price) * item->amount;
+    case -2:
+        return "[Memory Error]: Failed accessing memory!";
+        break;
+
+    case -3:
+        return "[Memory Error]: Accessed memory was corrupted!";
+        break;
+
+    case -10:
+        return "[Array Error]: Accessed array was empty!";
+        break;
+
+    case -11:
+        return "[Array Error]: Index was out of bounds!";
+        break;
+
+    case -12:
+        return "[Array Error]: Array excedded maximum allowed size!";
+        break;
+
+    case -13:
+        return "[Array Error]: Passed array was NULL!";
+        break;
+
+    case -15:
+        return "[Validation Error]: Passed parameters to function were "
+               "invalid!";
+        break;
+
+    case -16:
+        return "[Validation Error]: Validation state is invalid!";
+        break;
+
+    case -17:
+        return "[Validation Error]: Validation failed!";
+        break;
+
+    case -20:
+        return "[Runtime Error]: Operation failed to execute successfully!";
+        break;
+
+    case -21:
+        return "[Runtime Error]: Calculation within operation failed!";
+        break;
+
+    case -22:
+        return "[Runtime Error]: Function is not implemented yet!";
+        break;
+
+    default:
+        return NULL;
+        break;
     }
-    else if (item->amount > 3)
-    {
-        discount = (0.1 * item->item.price) * item->amount;
-    }
-
-    return discount;
-}
-
-/**
- * @brief This function calculates the total price of an item including discounts
- *
- * The price is calculated by multiplying the base item price by the quantity
- * bought and subtracting it by the discount provided.
- *
- * @param item A pointer to a CartItem structure that contains item details and quantity.
- * @return The total price of the item
- */
-int calc_price(CartItem *item)
-{
-    int total = (item->amount * item->item.price) - calc_discount(item);
-
-    return total;
 }

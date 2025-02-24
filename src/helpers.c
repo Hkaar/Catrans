@@ -1,5 +1,7 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+
+#include <core.h>
 
 /**
  * @brief Prompts the user to provide input from the standard io stream
@@ -12,9 +14,12 @@
  *
  * @return The input buffer filled with the user's input
  */
-char *input(char *msg, unsigned long long size)
-{
+char *input(char *msg, size_t size) {
     char *buffer = (char *)malloc(size);
+
+    if (buffer == NULL) {
+        return NULL;
+    }
 
     printf("%s", msg);
     fgets(buffer, size, stdin);
@@ -25,8 +30,9 @@ char *input(char *msg, unsigned long long size)
 /**
  * Clears the current console stream
  */
-void clear_console()
-{
+void clear_console() {
+    printf("\033[2J");
+
 #ifdef _WIN32
     system("cls");
 #else
