@@ -1,6 +1,6 @@
 # Catrans
 
-[![GitHub license](https://badgen.net/github/license/Hkaar/Catrans)](https://github.com/Hkaar/Catrans/blob/main/LICENSE)
+[![GitHub license](https://badgen.net/github/license/Hkaar/Catrans)](https://github.com/Hkaar/Catrans/blob/main/LICENSE.md)
 [![GitHub release](https://img.shields.io/github/release/Hkaar/Catrans.svg)](https://GitHub.com/Hkaar/Catrans/releases/)
 
 Catrans is a simple terminal based cash register, it's main purpose is to record
