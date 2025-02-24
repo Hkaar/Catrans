@@ -1,20 +1,28 @@
 #ifndef CORE_H
 #define CORE_H
 
-typedef struct
-{
-    char *name;
-    int price;
-} Item;
+typedef enum StatusCodes {
+    SUCCESS = 0,
 
-typedef struct
-{
-    Item item;
-    int amount;
-} CartItem;
+    ERROR_MEMORY_ALLOCATION = -1,
+    ERROR_MEMORY_ACCESS = -2,
+    ERROR_MEMORY_CORRUPTED = -3,
 
-int calc_discount(CartItem *item);
+    ERROR_EMPTY_ARRAY = -10,
+    ERROR_OUT_OF_BOUNDS = -11,
+    ERROR_ARRAY_FULL = -12,
+    ERROR_NULL_ARRAY = -13,
+    ERROR_ITEM_NOT_FOUND = -14,
 
-int calc_price(CartItem *item);
+    ERROR_INVALID_PARAMS = -15,
+    ERROR_INVALID_STATE = -16,
+    ERROR_VALIDATION_FAILED = -17,
+
+    ERROR_OPERATION_FAILED = -20,
+    ERROR_CALCULATION_FAILED = -21,
+    ERROR_NOT_IMPLEMENTED = -22,
+} status_codes_t;
+
+char *err_msg(status_codes_t code);
 
 #endif
