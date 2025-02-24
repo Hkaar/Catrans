@@ -1,9 +1,11 @@
 {
-    "files.associations": {
-        "*.embeddedhtml": "html",
-        "*.css": "css",
-        "core.h": "c"
-    },
+  "files.associations": {
+    "*.embeddedhtml": "html",
+    "*.css": "css",
+    "core.h": "c",
+    "string.h": "c",
+    "ui.h": "c"
+  },
 
-    "editor.rulers": [60, 80],
+  "editor.rulers": [60, 80]
 }
