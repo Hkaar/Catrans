@@ -6,34 +6,36 @@
 #include <core.h>
 #include <helpers.h>
 
-static void seperator(char character, int amount);
-static char *space(char *msg, int margin);
+static void separator(char character, int amount);
 
-static void receipt_menu(const cart_t *cart, char *name);
-static void recap_menu(const cart_t *cart, char *name);
+static void centered_align(const char *text, int width);
+static void left_align(const char *text, int width);
+
+static void receipt_menu(const cart_t *cart);
+static void recap_menu(const cart_t *cart);
 static void input_menu(cart_t *cart, item_t items[], int amount);
 
-void main_menu(char *name, item_t items[], int amount) {
+void main_menu(item_t items[], int amount) {
     cart_t cart = {NULL, 0};
 
     clear_console();
 
-    printf("Selamat datang di Toko %s\n", name);
+    printf("Selamat datang di Toko SKENSA\n");
     printf("Silakan pilih barang yang Anda inginkan:\n\n");
 
     int running = 1;
 
     while (running == 1) {
-        seperator('=', 48);
+        separator('=', 48);
         printf("| %-3s | %-20s | %-15s |\n", "No.", "Barang", "Harga");
-        seperator('-', 48);
+        separator('-', 48);
 
         for (int i = 0; i < amount; i++) {
             printf("| %-3d | %-20s | Rp. %-11d |\n", i + 1, items[i].name,
                    items[i].price);
         }
 
-        seperator('=', 48);
+        separator('=', 48);
 
         printf("\n99. Struk pembelian\n");
         printf("55. Reset pembelian\n");
@@ -52,7 +54,7 @@ void main_menu(char *name, item_t items[], int amount) {
         clear_console();
 
         if (strncmp(cmd, "99", strlen("99")) == 0) {
-            recap_menu(&cart, name);
+            recap_menu(&cart);
         } else if (strncmp(cmd, "55", strlen("55")) == 0) {
             reset_cart(&cart);
             printf("Berhasil reset pembelian!\n");
@@ -109,23 +111,22 @@ static void input_menu(cart_t *cart, item_t items[], int amount) {
     } while (keep_alive);
 }
 
-static void receipt_menu(const cart_t *cart, char *name) {
-    char *title = concat("TOKO ", name);
-    char *spacing = space(title, 48);
+static void receipt_menu(const cart_t *cart) {
+    separator('=', 72);
 
-    seperator('=', 71);
+    centered_align("TOKO SKENSA", 72);
+    centered_align("Jl. HOS Cokroaminoto No. 84 Denpasar", 72);
+    centered_align("Bali", 72);
+    centered_align("Telp: 0816285791", 72);
 
-    printf("%s%s%s\n", spacing, title, spacing);
-    printf("%-20cJl. HOS Cokroaminoto No. 84 Denpasar%-20c\n", ' ', ' ');
-    printf("Bali\n");
-    printf("Telp: 0816285791\n");
+    left_align("ID Struk: 1700807978", 72);
 
-    printf("ID Struk: 1700807978\n");
+    separator('=', 72);
 
-    seperator('=', 71);
-
-    printf("| %-20s | %-12s | %-12s | %-14s |\n", "Nama Barang", "Harga",
+    printf("| %-20s | %-12s | %-13s | %-14s |\n", "Nama Barang", "Harga",
            "Total", "Diskon");
+
+    separator('-', 72);
 
     for (int i = 0; i < cart->amount; i++) {
         cart_item_t *cart_item = cart->items[i];
@@ -133,22 +134,27 @@ static void receipt_menu(const cart_t *cart, char *name) {
         double discount;
         calc_discount(cart_item, &discount);
 
-        printf("| %d x %-15s | Rp. %-8d | Rp. %-8d | Rp. %-10.2f |\n",
+        printf("| %d x %-15s  | Rp. %-8d | Rp. %-9d | Rp. %-10.2f |\n",
                cart_item->amount, cart_item->item.name, cart_item->item.price,
                cart_item->amount * cart_item->item.price, discount);
     }
 
-    seperator('=', 71);
+    separator('=', 72);
+
+    left_align("  ", 72);
+    left_align("Total harga = Rp. 12000.00", 72);
+    left_align("Total harga = Rp. 12000.00", 72);
+    left_align("Total harga = Rp. 12000.00", 72);
+    left_align("Total harga = Rp. 12000.00", 72);
+    left_align("  ", 72);
+    left_align("Waktu/Hari : Fri Nov 24 14:29:33 2024", 72);
+    left_align("  ", 72);
+
+    separator('=', 72);
     getchar();
-
-    free(title);
-    title = NULL;
-
-    free(spacing);
-    spacing = NULL;
 }
 
-static void recap_menu(const cart_t *cart, char *name) {
+static void recap_menu(const cart_t *cart) {
     double final_price;
     cart_total_price(cart, &final_price);
 
@@ -156,12 +162,12 @@ static void recap_menu(const cart_t *cart, char *name) {
     double total_price = 0;
 
     printf("Rekap Pesanan Barang\n");
-    seperator('=', 96);
+    separator('=', 94);
 
-    printf("| %-3s | %-6s | %-19s | %-13s | %-19s | %-17s |\n", "No.", "Jumlah",
+    printf("| %-3s | %-6s | %-19s | %-13s | %-18s | %-16s |\n", "No.", "Jumlah",
            "Nama Barang", "Harga", "Total Harga", "Diskon");
 
-    seperator('-', 96);
+    separator('-', 94);
 
     for (int i = 0; i < cart->amount; i++) {
         cart_item_t *cart_item = cart->items[i];
@@ -176,18 +182,18 @@ static void recap_menu(const cart_t *cart, char *name) {
         total_price += cart_item->item.price * cart_item->amount;
 
         printf(
-            "| %-3d | %-6d | %-19s | Rp. %-9d | Rp. %-15.2f | Rp. %-13.2f |\n",
+            "| %-3d | %-6d | %-19s | Rp. %-9d | Rp. %-14.2f | Rp. %-12.2f |\n",
             i + 1, cart_item->amount, cart_item->item.name,
             cart_item->item.price, item_price, discount);
     }
 
-    seperator('=', 96);
+    separator('=', 94);
 
     printf("\nTotal Harga = Rp. %.2f\n", total_price);
     printf("Total Diskon = Rp. %.2f\n", total_discounts);
     printf("Total Bayar = Rp. %.2f\n", final_price);
 
-    seperator('=', 96);
+    separator('=', 94);
 
     char *raw_payout = input("\nMasukkan uang bayar: ", 64);
 
@@ -209,7 +215,7 @@ static void recap_menu(const cart_t *cart, char *name) {
     char *confirmation = input("Apakah Anda ingin print struk [Y/N]? ", 3);
 
     if (strncmp(strlwr(confirmation), "y", strlen("y")) == 0) {
-        receipt_menu(cart, name);
+        receipt_menu(cart);
     } else {
         printf("Membatalkan print struk!\n");
     }
@@ -220,7 +226,7 @@ static void recap_menu(const cart_t *cart, char *name) {
     clear_console();
 }
 
-static void seperator(char character, int amount) {
+static void separator(char character, int amount) {
     for (int i = 0; i < amount; i++) {
         printf("%c", character);
     }
@@ -228,15 +234,21 @@ static void seperator(char character, int amount) {
     printf("\n");
 }
 
-static char *space(char *msg, int margin) {
-    long length = (strlen(msg) + margin) / 2;
+static void centered_align(const char *text, int width) {
+    int text_length = strlen(text);
+    int padding = (width - text_length - 2) / 2;
 
-    char *result = (char *)malloc(length + 1);
-    if (result == NULL) {
-        return NULL;
-    }
+    printf("|");
+    printf("%*s%s%*s", padding, "", text, padding + (text_length % 2), "");
+    printf("|\n");
+}
 
-    memset(result, ' ', length);
-    result[length] = '\0';
-    return result;
+static void left_align(const char *text, int width) {
+    int text_length = strlen(text);
+    int padding = (width - text_length - 2) / 2;
+
+    printf("| ");
+    printf("%s%*s%*s", text, (padding - 1), "", padding + (text_length % 2),
+           "");
+    printf("|\n");
 }
