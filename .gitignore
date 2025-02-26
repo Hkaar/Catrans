@@ -1,2 +1,5 @@
 # CMAKE
 build/
+
+# Clang / LLVM
+.cache/
