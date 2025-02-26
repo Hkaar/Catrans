@@ -70,6 +70,6 @@ int main() {
 
     // printf("amount of items after reset: %d\n", cart.amount);
 
-    main_menu("SKENSA", items, 5);
+    main_menu(items, 5);
     return 0;
 }

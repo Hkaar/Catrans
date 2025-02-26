@@ -3,6 +3,6 @@
 
 #include "core.h"
 
-void main_menu(char *name, item_t items[], int amount);
+void main_menu(item_t items[], int amount);
 
 #endif
