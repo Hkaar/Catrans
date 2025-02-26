@@ -7,6 +7,7 @@
 #include <helpers.h>
 
 static void seperator(char character, int amount);
+static char *space(char *msg, int margin);
 
 static void receipt_menu(const cart_t *cart, char *name);
 static void recap_menu(const cart_t *cart, char *name);
@@ -109,19 +110,22 @@ static void input_menu(cart_t *cart, item_t items[], int amount) {
 }
 
 static void receipt_menu(const cart_t *cart, char *name) {
-    seperator('=', 64);
+    char *title = concat("TOKO ", name);
+    char *spacing = space(title, 48);
 
-    printf("TOKO %s\n", name);
-    printf("Jl. HOS Cokroaminoto No. 84 Denpasar\n");
+    seperator('=', 71);
+
+    printf("%s%s%s\n", spacing, title, spacing);
+    printf("%-20cJl. HOS Cokroaminoto No. 84 Denpasar%-20c\n", ' ', ' ');
     printf("Bali\n");
     printf("Telp: 0816285791\n");
 
     printf("ID Struk: 1700807978\n");
 
-    seperator('=', 64);
+    seperator('=', 71);
 
-    printf("| %-20s | %-8s | %-8s | %-8s |\n", "Nama Barang", "Harga", "Total",
-           "Diskon");
+    printf("| %-20s | %-12s | %-12s | %-14s |\n", "Nama Barang", "Harga",
+           "Total", "Diskon");
 
     for (int i = 0; i < cart->amount; i++) {
         cart_item_t *cart_item = cart->items[i];
@@ -129,13 +133,19 @@ static void receipt_menu(const cart_t *cart, char *name) {
         double discount;
         calc_discount(cart_item, &discount);
 
-        printf("| %d x %-15s | %-8d | %-8d | %-12.2f |\n", cart_item->amount,
-               cart_item->item.name, cart_item->item.price,
+        printf("| %d x %-15s | Rp. %-8d | Rp. %-8d | Rp. %-10.2f |\n",
+               cart_item->amount, cart_item->item.name, cart_item->item.price,
                cart_item->amount * cart_item->item.price, discount);
     }
 
-    seperator('=', 64);
+    seperator('=', 71);
     getchar();
+
+    free(title);
+    title = NULL;
+
+    free(spacing);
+    spacing = NULL;
 }
 
 static void recap_menu(const cart_t *cart, char *name) {
@@ -216,4 +226,17 @@ static void seperator(char character, int amount) {
     }
 
     printf("\n");
+}
+
+static char *space(char *msg, int margin) {
+    long length = (strlen(msg) + margin) / 2;
+
+    char *result = (char *)malloc(length + 1);
+    if (result == NULL) {
+        return NULL;
+    }
+
+    memset(result, ' ', length);
+    result[length] = '\0';
+    return result;
 }
