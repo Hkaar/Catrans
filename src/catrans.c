@@ -107,19 +107,20 @@ int push_to_cart(cart_t *cart, item_t item, int amount) {
         (cart_item_t **)malloc(sizeof(cart_item_t *) * (cart->amount + 1));
 
     if (new_items == NULL) {
-        free(cart_item);
+        free((void *)cart_item);
         cart_item = NULL;
 
         return ERROR_MEMORY_ALLOCATION;
     }
 
-    if (cart->items != NULL) {
-        memcpy(new_items, cart->items, sizeof(cart_item_t *) * cart->amount);
+    if (cart->items != NULL && new_items != NULL) {
+        memcpy((void *)new_items, (void *)cart->items,
+               sizeof(cart_item_t *) * cart->amount);
     }
 
     new_items[cart->amount] = cart_item;
 
-    free(cart->items);
+    free((void *)cart->items);
 
     cart->items = new_items;
     cart->amount++;
@@ -158,12 +159,12 @@ int pop_from_cart(cart_t *cart) {
         return ERROR_MEMORY_ALLOCATION;
     }
 
-    if (cart->items != NULL) {
-        memcpy(new_items, cart->items,
+    if (cart->items != NULL && new_items != NULL) {
+        memcpy((void *)new_items, (void *)cart->items,
                sizeof(cart_item_t *) * (cart->amount - 1));
     }
 
-    free(cart->items);
+    free((void *)cart->items);
 
     cart->amount--;
     cart->items = new_items;
@@ -192,11 +193,11 @@ int reset_cart(cart_t *cart) {
             return ERROR_MEMORY_CORRUPTED;
         }
 
-        free(cart->items[i]);
+        free((void *)cart->items[i]);
         cart->items[i] = NULL;
     }
 
-    free(cart->items);
+    free((void *)cart->items);
     cart->items = NULL;
 
     cart->amount = 0;

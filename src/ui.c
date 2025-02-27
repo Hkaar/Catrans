@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +7,7 @@
 #include <core.h>
 #include <helpers.h>
 
-static void separator(char character, int amount);
+static void separator(char repeat_character, int repeat_count);
 
 static void centered_align(const char *text, int width);
 static void left_align(const char *text, int width);
@@ -78,13 +79,32 @@ static void input_menu(cart_t *cart, item_t items[], int amount) {
         char *raw_product_id = input("Masukkan nomer barang: ", 12);
         char *raw_product_amount = input("Masukkan jumlah barang: ", 12);
 
-        int product_id = atoi(raw_product_id);
-        int product_amount = atoi(raw_product_amount);
+        long product_id;
+        long product_amount;
+        if (x_strtol(raw_product_id, &product_id, 10) != SUCCESS) {
+            printf("Produk id bukan nomer!\n");
 
-        free(raw_product_id);
+            free((void *)raw_product_id);
+            raw_product_id = NULL;
+
+            free((void *)raw_product_amount);
+            raw_product_amount = NULL;
+        }
+
+        if (x_strtol(raw_product_amount, &product_amount, 10) != SUCCESS) {
+            printf("Jumlah produk yang diberikan bukan nomer!\n");
+
+            free((void *)raw_product_id);
+            raw_product_id = NULL;
+
+            free((void *)raw_product_amount);
+            raw_product_amount = NULL;
+        }
+
+        free((void *)raw_product_id);
         raw_product_id = NULL;
 
-        free(raw_product_amount);
+        free((void *)raw_product_amount);
         raw_product_amount = NULL;
 
         if (product_id <= amount && product_id > 0) {
@@ -102,7 +122,7 @@ static void input_menu(cart_t *cart, item_t items[], int amount) {
 
         char *confirmation = input("\nLanjut memasukkan barang[Y/N]? ", 12);
 
-        if (strncmp(strlwr(confirmation), "n", strlen("n")) == 0) {
+        if (strncmp(_strlwr(confirmation), "n", strlen("n")) == 0) {
             keep_alive = 0;
         }
 
@@ -151,7 +171,6 @@ static void receipt_menu(const cart_t *cart) {
     left_align("  ", 72);
 
     separator('=', 72);
-    getchar();
 }
 
 static void recap_menu(const cart_t *cart) {
@@ -197,9 +216,15 @@ static void recap_menu(const cart_t *cart) {
 
     char *raw_payout = input("\nMasukkan uang bayar: ", 64);
 
-    double payout = atoi(raw_payout);
+    long payout;
 
-    free(raw_payout);
+    if (x_strtol(raw_payout, &payout, 10) != SUCCESS) {
+        free((void *)raw_payout);
+        raw_payout = NULL;
+        return;
+    }
+
+    free((void *)raw_payout);
     raw_payout = NULL;
 
     if (final_price > payout) {
@@ -220,22 +245,22 @@ static void recap_menu(const cart_t *cart) {
         printf("Membatalkan print struk!\n");
     }
 
-    free(confirmation);
+    free((void *)confirmation);
     confirmation = NULL;
 
     clear_console();
 }
 
-static void separator(char character, int amount) {
-    for (int i = 0; i < amount; i++) {
-        printf("%c", character);
+static void separator(const char repeat_character, int repeat_count) {
+    for (int i = 0; i < repeat_count; i++) {
+        printf("%c", repeat_character);
     }
 
     printf("\n");
 }
 
 static void centered_align(const char *text, int width) {
-    int text_length = strlen(text);
+    int text_length = (int)strlen(text);
     int padding = (width - text_length - 2) / 2;
 
     printf("|");
@@ -244,7 +269,7 @@ static void centered_align(const char *text, int width) {
 }
 
 static void left_align(const char *text, int width) {
-    int text_length = strlen(text);
+    int text_length = (int)strlen(text);
     int padding = (width - text_length - 2) / 2;
 
     printf("| ");

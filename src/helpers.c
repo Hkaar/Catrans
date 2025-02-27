@@ -1,3 +1,5 @@
+#include <errno.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,11 +21,16 @@ char *input(char *msg, size_t size) {
     char *buffer = (char *)malloc(size);
 
     if (buffer == NULL) {
+        free(buffer);
         return NULL;
     }
 
     printf("%s", msg);
-    fgets(buffer, size, stdin);
+
+    if (fgets(buffer, (int)size, stdin) == NULL) {
+        free(buffer);
+        return NULL;
+    }
 
     return buffer;
 }
@@ -35,9 +42,9 @@ void clear_console() {
     printf("\033[2J");
 
 #ifdef _WIN32
-    system("cls");
+    system("cls"); // NOLINT
 #else
-    system("clear");
+    system("clear"); // NOLINT
 #endif
 }
 
@@ -52,11 +59,34 @@ void clear_console() {
  *
  * @return The resulting combined string
  */
-char *concat(char *str_1, char *str_2) {
-    char *result = (char *)malloc(strlen(str_1) + strlen(str_2) + 1);
+char *concat(char *str1, char *str2) {
+    char *result = (char *)malloc(strlen(str1) + strlen(str2) + 1);
 
-    strcpy(result, str_1);
-    strcat(result, str_2);
+    if (sizeof(result) >= (strlen(str1) + strlen(str2))) {
+        strcpy(result, str1);
+        strcat(result, str2);
+    }
 
     return result;
+}
+
+status_codes_t x_strtol(char *src, long *dst, int base) {
+    // Set errno to 0, because any lib can set the errno value to any value
+    // except 0
+    errno = 0;
+    char *end;
+
+    long result = strtol(src, &end, base);
+
+    if (end == src) {
+        return ERROR_CONVERSION_FAILED;
+    }
+
+    if (errno == ERANGE) {
+        return ERROR_OUT_OF_RANGE;
+    }
+
+    *dst = result;
+
+    return SUCCESS;
 }
