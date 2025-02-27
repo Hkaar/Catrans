@@ -19,12 +19,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang-tidy
 
-      - name: Configure cmake
-        run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B ${{github.workspace}}/build
+      - name: Debug CMakeLists.txt location
+        run: ls -la ${{github.workspace}}
 
-      - name: Run clang-tidy
-        run: |
-          find . -name "*.c" -o -name "*.h" | xargs clang-tidy -fix -p ${{github.workspace}}/build
+      - name: Configure cmake
+        run: cmake -S ${{github.workspace}} -B ${{github.workspace}}/build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
   build-gcc:
     name: "GCC build"
