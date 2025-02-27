@@ -1,13 +1,16 @@
 name: CI
+
 on:
   push:
     paths-ignore:
       - "**.md"
       - "LICENSE"
+
 jobs:
   lint:
     name: "Lint"
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -18,6 +21,8 @@ jobs:
 
       - name: Configure cmake
         run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B build
+
+      - run: ls -a
 
       - name: Run clang-tidy
         run: |
