@@ -122,7 +122,7 @@ static void input_menu(cart_t *cart, item_t items[], int amount) {
 
         char *confirmation = input("\nLanjut memasukkan barang[Y/N]? ", 12);
 
-        if (strncmp(_strlwr(confirmation), "n", strlen("n")) == 0) {
+        if (strncmp(confirmation, "n", strlen("n")) == 0) {
             keep_alive = 0;
         }
 
@@ -239,7 +239,7 @@ static void recap_menu(const cart_t *cart) {
 
     char *confirmation = input("Apakah Anda ingin print struk [Y/N]? ", 3);
 
-    if (strncmp(strlwr(confirmation), "y", strlen("y")) == 0) {
+    if (strncmp(confirmation, "y", strlen("y")) == 0) {
         receipt_menu(cart);
     } else {
         printf("Membatalkan print struk!\n");
