@@ -19,8 +19,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang-tidy
 
-      - run: ls -a && pwd
-
       - name: Configure cmake
         run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B build
 
