@@ -1,0 +1,17 @@
+Checks: 'bugprone-*,cert-*,clang-analyzer-*,modernize-*,performance-*,portability-*,readability-*,-modernize-macro-to-enum,-readability-magic-numbers,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,-clang-analyzer-security.insecureAPI.*,-clang-diagnostic-deprecated-declarations'
+WarningsAsErrors: '*'
+HeaderFilterRegex: '.*'
+FormatStyle: file
+CheckOptions:
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  - key: readability-identifier-naming.FunctionCase
+    value: lower_case
+  - key: readability-identifier-naming.ParameterCase
+    value: lower_case
+  - key: readability-identifier-naming.MacroDefinitionCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.ConstantParameterCase
+    value: lower_case
