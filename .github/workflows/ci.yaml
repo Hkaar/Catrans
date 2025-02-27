@@ -20,11 +20,11 @@ jobs:
           sudo apt-get install -y clang-tidy
 
       - name: Configure cmake
-        run: cmake -S . -B build
+        run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B ${{github.workspace}}/build
 
       - name: Run clang-tidy
         run: |
-          find . -name "*.c" -o -name "*.h" | xargs clang-tidy -fix -p build
+          find . -name "*.c" -o -name "*.h" | xargs clang-tidy -fix -p ${{github.workspace}}/build
 
   build-gcc:
     name: "GCC build"
@@ -40,7 +40,7 @@ jobs:
           sudo apt-get install -y build-essential cmake
 
       - name: Configure with CMake
-        run: mkdir -p build && cmake -S . -B uild
+        run: mkdir -p build && cmake -S . -B ${{github.workspace}}/build
 
       - name: Build with GCC
         working-directory: build
@@ -66,7 +66,7 @@ jobs:
       - name: Configure with CMake
         env:
           CC: clang
-        run: mkdir -p build && cmake -S . -B build
+        run: mkdir -p build && cmake -B ${{github.workspace}}/build
 
       - name: Build with Clang
         working-directory: build
