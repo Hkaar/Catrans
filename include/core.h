@@ -21,6 +21,9 @@ typedef enum StatusCodes {
     ERROR_OPERATION_FAILED = -20,
     ERROR_CALCULATION_FAILED = -21,
     ERROR_NOT_IMPLEMENTED = -22,
+
+    ERROR_CONVERSION_FAILED = -25,
+    ERROR_OUT_OF_RANGE = -26
 } status_codes_t;
 
 char *err_msg(status_codes_t code);

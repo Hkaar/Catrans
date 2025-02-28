@@ -1,10 +1,16 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
-char *input(char *msg, size_t size);
+#define SIZE_T unsigned long long
+
+#include <core.h>
+
+char *input(char *msg, SIZE_T size);
 
 void clear_console();
 
-char *concat(char *str_1, char *str_2);
+char *concat(char *str1, char *str2);
+
+status_codes_t x_strtol(char *src, long *dst, int base);
 
 #endif
