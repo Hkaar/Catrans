@@ -109,7 +109,7 @@ static void input_menu(cart_t *cart, item_t items[], int amount) {
 
         if (product_id <= amount && product_id > 0) {
             status_codes_t result_code =
-                push_to_cart(cart, items[product_id - 1], product_amount);
+                push_to_cart(cart, items[product_id - 1], (int)product_amount);
 
             if (result_code != SUCCESS) {
                 printf("%s\n", err_msg(result_code));
@@ -227,13 +227,13 @@ static void recap_menu(const cart_t *cart) {
     free((void *)raw_payout);
     raw_payout = NULL;
 
-    if (final_price > payout) {
+    if (final_price > (int)payout) {
         printf("Uang bayar kurang dari %.2f yang diperlukan!", final_price);
         clear_console();
         return;
     }
 
-    double cash_change = payout - final_price;
+    double cash_change = (double)payout - final_price;
 
     printf("Kembalian = Rp. %.2f\n", cash_change);
 
