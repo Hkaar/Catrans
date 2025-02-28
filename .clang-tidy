@@ -15,3 +15,5 @@ CheckOptions:
     value: UPPER_CASE
   - key: readability-identifier-naming.ConstantParameterCase
     value: lower_case
+  - key: readability-identifier-naming.GlobalConstantIgnoredRegexp
+    value: 'info_.*'
