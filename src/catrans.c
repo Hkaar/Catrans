@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,7 +19,7 @@
  *
  * @return The status code of the function
  */
-int calc_discount(const cart_item_t *item, double *discount_out) {
+status_codes_t calc_discount(const cart_item_t *item, double *discount_out) {
     if (item == NULL) {
         return ERROR_INVALID_PARAMS;
     }
@@ -48,14 +49,16 @@ int calc_discount(const cart_item_t *item, double *discount_out) {
  *
  * @return The status code of the function
  */
-int calc_price(const cart_item_t *item, double *price_out) {
+status_codes_t calc_price(const cart_item_t *item, double *price_out,
+                          bool include_discount) {
+
     if (item == NULL) {
         return ERROR_INVALID_PARAMS;
     }
 
-    double discount;
+    double discount = 0;
 
-    if (calc_discount(item, &discount) != SUCCESS) {
+    if (include_discount && calc_discount(item, &discount) != SUCCESS) {
         return ERROR_CALCULATION_FAILED;
     }
 
@@ -77,7 +80,7 @@ int calc_price(const cart_item_t *item, double *price_out) {
  *
  * @return The status code of the function
  */
-int push_to_cart(cart_t *cart, item_t item, int amount) {
+status_codes_t cart_push(cart_t *cart, item_t item, int amount) {
     if (amount <= 0 || cart == NULL) {
         return ERROR_INVALID_PARAMS;
     }
@@ -138,7 +141,7 @@ int push_to_cart(cart_t *cart, item_t item, int amount) {
  *
  * @return The status code of the function
  */
-int pop_from_cart(cart_t *cart) {
+status_codes_t cart_pop(cart_t *cart) {
     if (cart == NULL) {
         return ERROR_INVALID_PARAMS;
     }
@@ -179,7 +182,7 @@ int pop_from_cart(cart_t *cart) {
  *
  * @return The status code of the function
  */
-int reset_cart(cart_t *cart) {
+status_codes_t cart_reset(cart_t *cart) {
     if (cart == NULL) {
         return ERROR_INVALID_PARAMS;
     }
@@ -216,7 +219,7 @@ int reset_cart(cart_t *cart) {
  *
  * @return The status code of the function
  */
-int cart_total_price(const cart_t *cart, double *price_out) {
+status_codes_t cart_total_price(const cart_t *cart, double *price_out) {
     if (cart == NULL) {
         return ERROR_INVALID_PARAMS;
     }
@@ -229,7 +232,7 @@ int cart_total_price(const cart_t *cart, double *price_out) {
             return ERROR_MEMORY_CORRUPTED;
         }
 
-        if (calc_price(cart->items[i], &item_price) != SUCCESS) {
+        if (calc_price(cart->items[i], &item_price, true) != SUCCESS) {
             return ERROR_CALCULATION_FAILED;
         }
 

@@ -1,4 +1,4 @@
-#include <errno.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,7 +57,7 @@ void main_menu(item_t items[], int amount) {
         if (strncmp(cmd, "99", strlen("99")) == 0) {
             recap_menu(&cart);
         } else if (strncmp(cmd, "55", strlen("55")) == 0) {
-            reset_cart(&cart);
+            cart_reset(&cart);
             printf("Berhasil reset pembelian!\n");
         } else if (strncmp(cmd, "11", strlen("11")) == 0) {
             input_menu(&cart, items, amount);
@@ -69,7 +69,7 @@ void main_menu(item_t items[], int amount) {
         }
     }
 
-    reset_cart(&cart);
+    cart_reset(&cart);
 }
 
 static void input_menu(cart_t *cart, item_t items[], int amount) {
@@ -81,6 +81,7 @@ static void input_menu(cart_t *cart, item_t items[], int amount) {
 
         long product_id;
         long product_amount;
+
         if (x_strtol(raw_product_id, &product_id, 10) != SUCCESS) {
             printf("Produk id bukan nomer!\n");
 
@@ -109,7 +110,7 @@ static void input_menu(cart_t *cart, item_t items[], int amount) {
 
         if (product_id <= amount && product_id > 0) {
             status_codes_t result_code =
-                push_to_cart(cart, items[product_id - 1], (int)product_amount);
+                cart_push(cart, items[product_id - 1], (int)product_amount);
 
             if (result_code != SUCCESS) {
                 printf("%s\n", err_msg(result_code));
@@ -192,7 +193,7 @@ static void recap_menu(const cart_t *cart) {
         cart_item_t *cart_item = cart->items[i];
 
         double item_price;
-        calc_price(cart_item, &item_price);
+        calc_price(cart_item, &item_price, true);
 
         double discount;
         calc_discount(cart_item, &discount);

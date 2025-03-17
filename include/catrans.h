@@ -1,6 +1,9 @@
 #ifndef CATRANS_H
 #define CATRANS_H
 
+#include <core.h>
+#include <stdbool.h>
+
 typedef struct Item {
     char *name;
     int price;
@@ -16,16 +19,17 @@ typedef struct Cart {
     int amount;
 } cart_t;
 
-int calc_discount(const cart_item_t *item, double *discount_out);
+status_codes_t calc_discount(const cart_item_t *item, double *discount_out);
 
-int calc_price(const cart_item_t *item, double *price_out);
+status_codes_t calc_price(const cart_item_t *item, double *price_out,
+                          bool include_discount);
 
-int push_to_cart(cart_t *cart, item_t item, int amount);
+status_codes_t cart_push(cart_t *cart, item_t item, int amount);
 
-int pop_from_cart(cart_t *cart);
+status_codes_t cart_pop(cart_t *cart);
 
-int cart_total_price(const cart_t *cart, double *price_out);
+status_codes_t cart_total_price(const cart_t *cart, double *price_out);
 
-int reset_cart(cart_t *cart);
+status_codes_t cart_reset(cart_t *cart);
 
 #endif
