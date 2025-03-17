@@ -46,7 +46,7 @@ char *err_msg(status_codes_t code) {
         break;
 
     case -20:
-        return "[Runtime Error]: Operation failed to execute successfully!";
+        return "[Runtime Error]: Operation failed to execute!";
         break;
 
     case -21:
