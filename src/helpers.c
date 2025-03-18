@@ -54,18 +54,20 @@ void clear_console() {
  * The function allocates enough memory for both strings and copy both of them
  * into the new region.
  *
- * @param str_1 The first string to be concatenated
- * @param str_2 The second string to be concatenated
+ * @param str1 The first string to be concatenated
+ * @param str2 The second string to be concatenated
  *
  * @return The resulting combined string
  */
 char *concat(char *str1, char *str2) {
     char *result = (char *)malloc(strlen(str1) + strlen(str2) + 1);
 
-    if (sizeof(result) >= (strlen(str1) + strlen(str2))) {
-        strcpy(result, str1);
-        strcat(result, str2);
+    if (result == NULL) {
+        return NULL;
     }
+
+    strcpy(result, str1);
+    strcat(result, str2);
 
     return result;
 }
