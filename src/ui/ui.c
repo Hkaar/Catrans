@@ -10,13 +10,14 @@
 #include <ui_helpers.h>
 #include <ui_input.h>
 #include <ui_recap.h>
+#include <ui.h>
 
 void main_menu(item_t items[], int amount) {
     cart_t cart = {NULL, 0};
 
     clear_console();
 
-    printf("Selamat datang di Toko SKENSA\n");
+    printf("Selamat datang di Toko %s\n", STORE_NAME);
     printf("Silakan pilih barang yang Anda inginkan:\n\n");
 
     while (true) {

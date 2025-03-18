@@ -1,15 +1,20 @@
 #include <stdio.h>
 
 #include <catrans.h>
+#include <helpers.h>
+
 #include <ui_helpers.h>
+#include <ui.h>
 
 void receipt_menu(const cart_t *cart) {
     separator('=', 72);
 
-    align_center("TOKO SKENSA", 72);
-    align_center("Jl. HOS Cokroaminoto No. 84 Denpasar", 72);
-    align_center("Bali", 72);
-    align_center("Telp: 0816285791", 72);
+    char *store_name = concat("TOKO ", STORE_NAME);
+    char *store_phone = concat("Telp: ", STORE_PHONE);
+
+    align_center(store_name, 72);
+    align_center(STORE_ADDRESS, 72);
+    align_center(store_phone, 72);
 
     align_left("ID Struk: 1700807978", 72);
 
@@ -43,4 +48,6 @@ void receipt_menu(const cart_t *cart) {
     align_left("  ", 72);
 
     separator('=', 72);
+
+    getchar();
 }
