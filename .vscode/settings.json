@@ -1,18 +1,22 @@
 {
-  "files.associations": {
-    "*.embeddedhtml": "html",
-    "*.css": "css",
-    "core.h": "c",
-    "string.h": "c",
-    "ui.h": "c"
-  },
+    "files.associations": {
+        "*.embeddedhtml": "html",
+        "*.css": "css",
+        "core.h": "c",
+        "string.h": "c",
+        "ui.h": "c",
+        "helpers.h": "c",
+        "catrans.h": "c",
+        "ui_helpers.h": "c",
+        "stdlib.h": "c"
+    },
 
-  "editor.rulers": [60, 80],
+    "editor.rulers": [60, 80],
 
-  "files.watcherExclude": {
-    "**/.git/objects/**": true,
-    "**/.git/subtree-cache/**": true,
-    "**/.hg/store/**": true,
-    "**/.cache/**": true,
-  }
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/.hg/store/**": true,
+        "**/.cache/**": true
+    }
 }
