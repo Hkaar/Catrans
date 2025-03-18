@@ -8,7 +8,8 @@
         "helpers.h": "c",
         "catrans.h": "c",
         "ui_helpers.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "ui_recap.h": "c"
     },
 
     "editor.rulers": [60, 80],
