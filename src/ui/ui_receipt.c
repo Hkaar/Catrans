@@ -48,6 +48,4 @@ void receipt_menu(const cart_t *cart) {
     align_left("  ", 72);
 
     separator('=', 72);
-
-    getchar();
 }
