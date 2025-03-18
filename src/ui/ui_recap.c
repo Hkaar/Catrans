@@ -9,11 +9,13 @@
 #include <ui_helpers.h>
 #include <ui_receipt.h>
 
-void recap_menu(const cart_t *cart) {
+void recap_menu(cart_t *cart) {
     if (cart->amount <= 0) {
-        printf("Anda tidak memiliki barang di keranjang!");
+        printf("Anda tidak memiliki barang di keranjang!\n");
         return;
     }
+
+    cart_sort(cart);
     
     double final_price;
     cart_total_price(cart, &final_price);
@@ -52,7 +54,7 @@ void recap_menu(const cart_t *cart) {
 
     printf("\nTotal Harga = Rp. %.2f\n", total_price);
     printf("Total Diskon = Rp. %.2f\n", total_discounts);
-    printf("Total Bayar = Rp. %.2f\n", final_price);
+    printf("Total Bayar = Rp. %.2f\n\n", final_price);
 
     separator('=', 94);
 
@@ -70,8 +72,8 @@ void recap_menu(const cart_t *cart) {
     raw_payout = NULL;
 
     if (final_price > (int)payout) {
-        printf("Uang bayar kurang dari %.2f yang diperlukan!", final_price);
         clear_console();
+        printf("Uang bayar kurang dari Rp. %.2f yang diperlukan!\n", final_price);
         return;
     }
 
@@ -79,9 +81,10 @@ void recap_menu(const cart_t *cart) {
 
     printf("Kembalian = Rp. %.2f\n", cash_change);
 
-    char *confirmation = input("Apakah Anda ingin print struk [Y/N]? ", 3);
+    char *confirmation = input("\nApakah Anda ingin print struk [Y/N]? ", 3);
 
     if (strncmp(confirmation, "y", strlen("y")) == 0) {
+        printf("\n");
         receipt_menu(cart);
     } else {
         printf("Membatalkan print struk!\n");

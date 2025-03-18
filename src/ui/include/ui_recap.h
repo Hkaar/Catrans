@@ -3,6 +3,6 @@
 
 #include <catrans.h>
 
-void recap_menu(const cart_t *cart);
+void recap_menu(cart_t *cart);
 
 #endif
