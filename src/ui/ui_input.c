@@ -58,6 +58,7 @@ void input_menu(cart_t *cart, item_t items[], int amount) {
         char *confirmation = input("\nLanjut memasukkan barang[Y/N]? ", 12);
 
         if (strncmp(confirmation, "n", strlen("n")) == 0) {
+            clear_console();
             break;
         }
 

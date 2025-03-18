@@ -11,6 +11,7 @@
 
 void recap_menu(const cart_t *cart) {
     if (cart->amount <= 0) {
+        printf("Anda tidak memiliki barang di keranjang!");
         return;
     }
     
