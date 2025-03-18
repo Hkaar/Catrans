@@ -243,3 +243,55 @@ status_codes_t cart_total_price(const cart_t *cart, double *price_out) {
 
     return SUCCESS;
 }
+
+/**
+ * @brief Sorts the cart by ascending order
+ * 
+ * Sorts each item in the cart by total price and in ascending order by using 
+ * the bubble sort algorithm
+ * 
+ * @param cart The cart to be sorted
+ */
+status_codes_t cart_sort(cart_t *cart) {
+    if (cart == NULL) {
+        return ERROR_INVALID_PARAMS;
+    }
+    
+    cart_item_t **backup = (cart_item_t **)malloc(
+                            sizeof(cart_item_t *) * cart->amount);
+    
+    if (backup == NULL) {
+        return ERROR_MEMORY_ALLOCATION;
+    }
+    
+    memcpy((void *)backup, (void *)cart->items, 
+            sizeof(cart_item_t *) * cart->amount);
+
+    for (int i = 0; i < cart->amount; i++) {
+        for (int j = 0; j < cart->amount - 1 - i; j++) {
+            double price_1;
+            double price_2;
+
+            if (calc_price(cart->items[j], &price_1, true) != SUCCESS || 
+                calc_price(cart->items[j+1], &price_2, true) != SUCCESS) {
+
+                memcpy((void *)cart->items, (void *)backup, 
+                        sizeof(cart_item_t *) * cart->amount);
+                
+                free((void *)backup);
+
+                return ERROR_OPERATION_FAILED;
+            } 
+            
+            if (price_1 > price_2) {
+                cart_item_t *tmp = cart->items[j];
+                cart->items[j] = cart->items[j+1];
+                cart->items[j+1] = tmp;  
+            }   
+        }
+    }
+
+    free((void *) backup);
+
+    return SUCCESS;
+}

@@ -32,4 +32,6 @@ status_codes_t cart_total_price(const cart_t *cart, double *price_out);
 
 status_codes_t cart_reset(cart_t *cart);
 
+status_codes_t cart_sort(cart_t *cart);
+
 #endif
