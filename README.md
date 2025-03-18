@@ -4,7 +4,7 @@
 [![GitHub release](https://img.shields.io/github/release/Hkaar/Catrans.svg)](https://GitHub.com/Hkaar/Catrans/releases/)
 
 Catrans is a simple terminal based cash register, it's main purpose is to record
-and process transactions by the terminal.
+and process transactions in the terminal.
 
 ## Features
 
@@ -14,7 +14,7 @@ and process transactions by the terminal.
 
 ## Requirements
 
-- GCC/MSVC/Clang
+- GCC/MSVC/Clang **(With support for C11)**
 - CMake >= 3.12
 
 ## Setup guide

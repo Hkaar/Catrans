@@ -243,3 +243,29 @@ status_codes_t cart_total_price(const cart_t *cart, double *price_out) {
 
     return SUCCESS;
 }
+
+/**
+ * @brief Sorts the cart by ascending order
+ * 
+ * Sorts each item in the cart by total price and in ascending order by using 
+ * the bubble sort algorithm
+ * 
+ * @param cart The cart to be sorted
+ */
+status_codes_t cart_sort(cart_t *cart) {
+    if (cart == NULL) {
+        return ERROR_INVALID_PARAMS;
+    }
+
+    for (int i = 0; i < cart->amount; i++) {
+        for (int j = 0; j < cart->amount - 1 - i; j++) {
+            if (cart->items[j]->amount > cart->items[j+1]->amount) {
+                cart_item_t *tmp = cart->items[j];
+                cart->items[j] = cart->items[j+1];
+                cart->items[j+1] = tmp;  
+            }   
+        }
+    }
+
+    return SUCCESS;
+}
