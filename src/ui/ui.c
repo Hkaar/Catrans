@@ -10,7 +10,8 @@
 #include <ui_helpers.h>
 #include <ui_input.h>
 #include <ui_recap.h>
-#include <ui.h>
+
+#include <config.h>
 
 void main_menu(item_t items[], int amount) {
     cart_t cart = {NULL, 0};
@@ -21,17 +22,17 @@ void main_menu(item_t items[], int amount) {
     printf("Silakan pilih barang yang Anda inginkan:\n\n");
 
     while (true) {
-        separator('=', 48);
+        separator('=', 48, stdout);
 
         printf("| %-3s | %-20s | %-15s |\n", "No.", "Barang", "Harga");
-        separator('-', 48);
+        separator('-', 48, stdout);
 
         for (int i = 0; i < amount; i++) {
             printf("| %-3d | %-20s | Rp. %-11d |\n", i + 1, items[i].name,
                    items[i].price);
         }
 
-        separator('=', 48);
+        separator('=', 48, stdout);
 
         printf("\n99. Struk pembelian\n");
         printf("55. Reset pembelian\n");
