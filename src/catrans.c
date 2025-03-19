@@ -62,7 +62,7 @@ status_codes_t calc_price(const cart_item_t *item, long *price_out,
         return ERROR_CALCULATION_FAILED;
     }
 
-    long total = (item->amount * item->item.price) - discount;
+    long total = (long) (item->amount * item->item.price) - discount;
     *price_out = total;
 
     return SUCCESS;

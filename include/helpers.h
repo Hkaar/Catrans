@@ -17,6 +17,6 @@ status_codes_t x_strtol(char *src, long *dst, int base);
 
 status_codes_t x_fprintf(FILE *stream, char *format, ...);
 
-char *x_snprintf(char *format, size_t size, ...);
+char *x_snprintf(size_t size, char *format, ...) ;
 
 #endif

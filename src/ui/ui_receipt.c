@@ -39,7 +39,7 @@ void receipt_menu(const cart_t *cart, long payed) {
         return;
     }
 
-    receipt_data.receipt_id = x_snprintf("%lld", 48, gen_receipt_id());
+    receipt_data.receipt_id = x_snprintf(48, "%lld", gen_receipt_id());
 
     if (receipt_data.receipt_id == NULL) {
         destroy_receipt_data(&receipt_data);
@@ -78,7 +78,7 @@ void receipt_menu(const cart_t *cart, long payed) {
     cart_total_price(cart, &total_price, false);
     cart_total_price(cart, &bill, true);
 
-    receipt_data.total_price_line = concat("Total Harga = Rp. ", x_snprintf("%ld", 32, total_price));
+    receipt_data.total_price_line = concat("Total Harga = Rp. ", x_snprintf(32, "%ld", total_price));
 
     if (receipt_data.total_price_line == NULL) {
         destroy_receipt_data(&receipt_data);
@@ -86,7 +86,7 @@ void receipt_menu(const cart_t *cart, long payed) {
         return;
     }
 
-    receipt_data.bill_line = concat("Tagihan = Rp. ", x_snprintf("%ld", 32, bill));
+    receipt_data.bill_line = concat("Tagihan = Rp. ", x_snprintf(32, "%ld", bill));
 
     if (receipt_data.bill_line == NULL) {
         destroy_receipt_data(&receipt_data);
@@ -94,7 +94,7 @@ void receipt_menu(const cart_t *cart, long payed) {
         return;
     }
     
-    receipt_data.payed_line = concat("Pembayaran = Rp. ", x_snprintf("%ld", 32, payed));
+    receipt_data.payed_line = concat("Pembayaran = Rp. ", x_snprintf(32, "%ld", payed));
 
     if (receipt_data.payed_line == NULL) {
         destroy_receipt_data(&receipt_data);
@@ -102,7 +102,7 @@ void receipt_menu(const cart_t *cart, long payed) {
         return;
     }
     
-    receipt_data.cashback_line = concat("Kembalian = Rp. ", x_snprintf("%ld", 32, payed-bill));
+    receipt_data.cashback_line = concat("Kembalian = Rp. ", x_snprintf(32, "%ld", payed-bill));
 
     if (receipt_data.cashback_line == NULL) {
         destroy_receipt_data(&receipt_data);
@@ -170,7 +170,7 @@ void receipt_menu(const cart_t *cart, long payed) {
     }
 
     // TODO: CREATE A SEPERATE FUNCTION TO CALCULATE TOTAL DISCOUNTS
-    receipt_data.total_discount_line = concat("Total Diskon = Rp. ", x_snprintf("%ld", 32, total_discount));
+    receipt_data.total_discount_line = concat("Total Diskon = Rp. ", x_snprintf(32, "%ld", total_discount));
 
     if (receipt_data.total_discount_line == NULL) {
         destroy_receipt_data(&receipt_data);

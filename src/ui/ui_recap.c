@@ -43,7 +43,7 @@ void recap_menu(cart_t *cart) {
         calc_discount(cart_item, &discount);
 
         total_discounts += discount;
-        total_price += cart_item->item.price * cart_item->amount;
+        total_price += (long) cart_item->item.price * cart_item->amount;
 
         printf(
             "| %-3d | %-6d | %-19s | Rp. %-9d | Rp. %-14ld | Rp. %-12ld |\n",

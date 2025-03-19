@@ -122,9 +122,9 @@ status_codes_t x_fprintf(FILE *stream, const char *format, ...) {
  * @param format The format string to be used
  * @param size The size of the new string
  */
-char *x_snprintf(char *format, size_t size, ...) {
+char *x_snprintf(size_t size, char *format, ...) {
     va_list args;
-    va_start(args, size);
+    va_start(args, format);
 
     char *buffer = (char *)malloc(size);
 
