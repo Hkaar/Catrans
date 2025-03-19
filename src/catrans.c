@@ -19,17 +19,17 @@
  *
  * @return The status code of the function
  */
-status_codes_t calc_discount(const cart_item_t *item, double *discount_out) {
+status_codes_t calc_discount(const cart_item_t *item, long *discount_out) {
     if (item == NULL) {
         return ERROR_INVALID_PARAMS;
     }
 
-    double discount = 0;
+    long discount = 0;
 
     if (item->amount > 5) {
-        discount = (0.15 * item->item.price) * item->amount;
+        discount = (long) (0.15 * item->item.price) * item->amount;
     } else if (item->amount > 3) {
-        discount = (0.1 * item->item.price) * item->amount;
+        discount = (long) (0.1 * item->item.price) * item->amount;
     }
 
     *discount_out = discount;
@@ -49,20 +49,20 @@ status_codes_t calc_discount(const cart_item_t *item, double *discount_out) {
  *
  * @return The status code of the function
  */
-status_codes_t calc_price(const cart_item_t *item, double *price_out,
+status_codes_t calc_price(const cart_item_t *item, long *price_out,
                           bool include_discount) {
 
     if (item == NULL) {
         return ERROR_INVALID_PARAMS;
     }
 
-    double discount = 0;
+    long discount = 0;
 
     if (include_discount && calc_discount(item, &discount) != SUCCESS) {
         return ERROR_CALCULATION_FAILED;
     }
 
-    double total = (item->amount * item->item.price) - discount;
+    long total = (long) (item->amount * item->item.price) - discount;
     *price_out = total;
 
     return SUCCESS;
@@ -219,20 +219,20 @@ status_codes_t cart_reset(cart_t *cart) {
  *
  * @return The status code of the function
  */
-status_codes_t cart_total_price(const cart_t *cart, double *price_out) {
+status_codes_t cart_total_price(const cart_t *cart, long *price_out, bool include_discounts) {
     if (cart == NULL) {
         return ERROR_INVALID_PARAMS;
     }
 
-    double item_price = 0;
-    double total = 0;
+    long item_price = 0;
+    long total = 0;
 
     for (int i = 0; i < cart->amount; i++) {
         if (cart->items[i] == NULL) {
             return ERROR_MEMORY_CORRUPTED;
         }
 
-        if (calc_price(cart->items[i], &item_price, true) != SUCCESS) {
+        if (calc_price(cart->items[i], &item_price, include_discounts) != SUCCESS) {
             return ERROR_CALCULATION_FAILED;
         }
 
@@ -245,9 +245,9 @@ status_codes_t cart_total_price(const cart_t *cart, double *price_out) {
 }
 
 /**
- * @brief Sorts the cart by ascending order
+ * @brief Sorts the cart by descending order
  * 
- * Sorts each item in the cart by total price and in ascending order by using 
+ * Sorts each item in the cart by total price and in descending order by using 
  * the bubble sort algorithm
  * 
  * @param cart The cart to be sorted
@@ -259,7 +259,7 @@ status_codes_t cart_sort(cart_t *cart) {
 
     for (int i = 0; i < cart->amount; i++) {
         for (int j = 0; j < cart->amount - 1 - i; j++) {
-            if (cart->items[j]->amount > cart->items[j+1]->amount) {
+            if (cart->items[j]->amount < cart->items[j+1]->amount) {
                 cart_item_t *tmp = cart->items[j];
                 cart->items[j] = cart->items[j+1];
                 cart->items[j+1] = tmp;  

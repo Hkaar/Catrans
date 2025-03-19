@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include <core.h>
 
@@ -91,4 +92,54 @@ status_codes_t x_strtol(char *src, long *dst, int base) {
     *dst = result;
 
     return SUCCESS;
+}
+
+/**
+ * @brief A modified fprintf function with error handling
+ * 
+ * @param stream The output stream to be used
+ * @param format The format string to be printed
+ */
+status_codes_t x_fprintf(FILE *stream, const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    
+    int result = vfprintf(stream, format, args); // NOLINT
+    
+    va_end(args);
+    
+    if (result < 0) { 
+        perror("Failed writing to given stream!");
+        return ERROR_OPERATION_FAILED;
+    }
+    
+    return SUCCESS;
+}
+
+/**
+ * @brief A wrapper around the snprintf function with error handling
+ * 
+ * @param format The format string to be used
+ * @param size The size of the new string
+ */
+char *x_snprintf(size_t size, char *format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    char *buffer = (char *)malloc(size);
+
+    if (buffer == NULL) {
+        va_end(args);
+        return NULL;
+    }
+
+    int result = vsnprintf(buffer, size, format, args); // NOLINT
+    va_end(args);
+
+    if (result < 0 || result >= (int) size) {
+        free(buffer);
+        return NULL;
+    }
+
+    return buffer;
 }

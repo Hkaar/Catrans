@@ -19,16 +19,16 @@ typedef struct Cart {
     int amount;
 } cart_t;
 
-status_codes_t calc_discount(const cart_item_t *item, double *discount_out);
+status_codes_t calc_discount(const cart_item_t *item, long *discount_out);
 
-status_codes_t calc_price(const cart_item_t *item, double *price_out,
+status_codes_t calc_price(const cart_item_t *item, long *price_out,
                           bool include_discount);
 
 status_codes_t cart_push(cart_t *cart, item_t item, int amount);
 
 status_codes_t cart_pop(cart_t *cart);
 
-status_codes_t cart_total_price(const cart_t *cart, double *price_out);
+status_codes_t cart_total_price(const cart_t *cart, long *price_out, bool include_discounts);
 
 status_codes_t cart_reset(cart_t *cart);
 
