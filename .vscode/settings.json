@@ -9,7 +9,8 @@
         "catrans.h": "c",
         "ui_helpers.h": "c",
         "stdlib.h": "c",
-        "ui_recap.h": "c"
+        "ui_recap.h": "c",
+        "config.h": "c"
     },
 
     "editor.rulers": [60, 80],
