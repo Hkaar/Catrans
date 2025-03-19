@@ -1,10 +1,12 @@
 #ifndef UI_HELPERS_H
 #define UI_HELPERS_H
 
-void separator(char repeat_char, int count);
+#include <stdio.h>
 
-void align_center(const char *text, int width);
+void separator(char separator_char, int count, FILE *stream);
 
-void align_left(const char *text, int width);
+void align_center(const char *text, int width, FILE *stream);
+
+void align_left(const char *text, int width, FILE *stream);
 
 #endif
