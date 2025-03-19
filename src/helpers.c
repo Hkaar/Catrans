@@ -104,7 +104,7 @@ status_codes_t x_fprintf(FILE *stream, const char *format, ...) {
     va_list args;
     va_start(args, format);
     
-    int result = vfprintf(stream, format, args);
+    int result = vfprintf(stream, format, args); // NOLINT
     
     va_end(args);
     
@@ -133,7 +133,7 @@ char *x_snprintf(size_t size, char *format, ...) {
         return NULL;
     }
 
-    int result = vsnprintf(buffer, size, format, args);
+    int result = vsnprintf(buffer, size, format, args); // NOLINT
     va_end(args);
 
     if (result < 0 || result >= (int) size) {
