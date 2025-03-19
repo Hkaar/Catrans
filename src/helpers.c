@@ -129,6 +129,7 @@ char *x_snprintf(char *format, size_t size, ...) {
     char *buffer = (char *)malloc(size);
 
     if (buffer == NULL) {
+        va_end(args);
         return NULL;
     }
 

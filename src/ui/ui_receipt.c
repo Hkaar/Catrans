@@ -4,11 +4,13 @@
 #include <time.h>
 #include <string.h>
 
+#include <core.h>
 #include <catrans.h>
 #include <helpers.h>
 
 #include <ui_receipt.h>
 #include <ui_helpers.h>
+
 #include <config.h>
 
 static char *get_receipt_date();
@@ -69,15 +71,9 @@ void receipt_menu(const cart_t *cart, long payed) {
         return;
     }
 
-    long total_price = 0, total_discount = 0, bill = 0;
-
-    char *current_date = get_receipt_date();
-
-    if (current_date == NULL) {
-        destroy_receipt_data(&receipt_data);
-        printf("Failed to get current date!\n");
-        return;
-    }
+    long total_price = 0;
+    long total_discount = 0;
+    long bill = 0;
 
     cart_total_price(cart, &total_price, false);
     cart_total_price(cart, &bill, true);
@@ -114,7 +110,18 @@ void receipt_menu(const cart_t *cart, long payed) {
         return;
     }
 
+    char *current_date = get_receipt_date();
+
+    if (current_date == NULL) {
+        destroy_receipt_data(&receipt_data);
+        printf("Failed to get current date!\n");
+        return;
+    }
+
     receipt_data.date_line = concat("Waktu/Hari: ", current_date);
+
+    free(current_date);
+    current_date = NULL;
 
     if (receipt_data.date_line == NULL) {
         destroy_receipt_data(&receipt_data);
@@ -134,8 +141,13 @@ void receipt_menu(const cart_t *cart, long payed) {
 
     separator('=', 72, receipt_data.file);
 
-    fprintf(receipt_data.file, "| %-20s | %-12s | %-13s | %-14s |\n", "Nama Barang", 
-        "Harga", "Total", "Diskon");
+    if (x_fprintf(receipt_data.file, "| %-20s | %-12s | %-13s | %-14s |\n", "Nama Barang", 
+        "Harga", "Total", "Diskon") != SUCCESS) {
+
+        destroy_receipt_data(&receipt_data);
+        printf("Failed writing to file!");
+        return;
+    }
 
     separator('-', 72, receipt_data.file);
 
@@ -147,9 +159,14 @@ void receipt_menu(const cart_t *cart, long payed) {
 
         total_discount += discount;
 
-        fprintf(receipt_data.file, "| %-2d x %-15s | Rp. %-8d | Rp. %-9d | Rp. %-10ld |\n",
-               cart_item->amount, cart_item->item.name, cart_item->item.price,
-               cart_item->amount * cart_item->item.price, discount);
+        if (x_fprintf(receipt_data.file, "| %-2d x %-15s | Rp. %-8d | Rp. %-9d | Rp. %-10ld |\n",
+            cart_item->amount, cart_item->item.name, cart_item->item.price,
+            cart_item->amount * cart_item->item.price, discount) != SUCCESS) {
+
+            destroy_receipt_data(&receipt_data);
+            printf("Failed writing to file!");
+            return;
+        }
     }
 
     // TODO: CREATE A SEPERATE FUNCTION TO CALCULATE TOTAL DISCOUNTS
@@ -194,10 +211,21 @@ static char *get_receipt_date() {
         return NULL;
     }
     
-    time(&rawtime);
+    if (time(&rawtime) < 0) {
+        free(buffer);
+        printf("Failed to generate id!\n");
+        return NULL;
+    }
+    
     timeinfo = localtime(&rawtime);
 
-    strftime(buffer, 64, "%c", timeinfo);
+    if (strftime(buffer, 64, "%c", timeinfo) == 0) {
+        free(buffer);
+
+        printf("Failed to generate id!\n");
+        return NULL;
+    }
+    
     return buffer;
 }
 
@@ -216,7 +244,7 @@ void init_receipt_data(receipt_data_t *receipt_data) {
 }
 
 /**
- * @brief Destroys the receipt data object fro memory
+ * @brief Destroys the receipt data object from memory
  */
 void destroy_receipt_data(receipt_data_t *receipt_data) {
     if (receipt_data->file_path) {
@@ -225,7 +253,10 @@ void destroy_receipt_data(receipt_data_t *receipt_data) {
     }
 
     if (receipt_data->file) {
-        fclose(receipt_data->file);
+        if (fclose(receipt_data->file) < 0) {
+            printf("Failed closing file!\n");
+        }
+
         receipt_data->file = NULL;
     }
 

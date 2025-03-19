@@ -1,6 +1,8 @@
 #ifndef UI_RECEIPT_H
 #define UI_RECEIPT_H
 
+#include <stdio.h>
+
 #include <catrans.h>
 
 typedef struct ReceiptData {
